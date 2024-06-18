@@ -25,6 +25,7 @@ import android.view.WindowManager;
 
 import com.arialyy.frame.util.show.FL;
 import com.arialyy.frame.util.show.L;
+import io.github.pixee.security.BoundedLineReader;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -206,7 +207,7 @@ public class AndroidUtils {
       p = Runtime.getRuntime().exec("ls -l " + filePath);
       // 获取返回内容
       BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
-      String str = in.readLine();
+      String str = BoundedLineReader.readLine(in, 5_000_000);
       L.i(TAG, str);
       if (str != null && str.length() >= 4) {
         char flag = str.charAt(3);

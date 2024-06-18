@@ -23,6 +23,7 @@ import com.arialyy.aria.http.BaseHttpThreadTaskAdapter;
 import com.arialyy.aria.http.ConnectionHelp;
 import com.arialyy.aria.util.ALog;
 import com.arialyy.aria.util.CommonUtil;
+import io.github.pixee.security.BoundedLineReader;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -209,7 +210,7 @@ final class HttpUThreadTaskAdapter extends BaseHttpThreadTaskAdapter {
       BufferedReader reader =
           new BufferedReader(new InputStreamReader(ConnectionHelp.convertInputStream(mHttpConn)));
       String line;
-      while (getThreadTask().isLive() && (line = reader.readLine()) != null) {
+      while (getThreadTask().isLive() && (line = BoundedLineReader.readLine(reader, 5_000_000)) != null) {
         response.append(line);
       }
       reader.close();

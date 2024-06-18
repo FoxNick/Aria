@@ -38,6 +38,7 @@ import com.arialyy.aria.util.CheckUtil;
 import com.arialyy.aria.util.CommonUtil;
 import com.arialyy.aria.util.FileUtil;
 import com.arialyy.aria.util.Regular;
+import io.github.pixee.security.BoundedLineReader;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -128,7 +129,7 @@ final public class M3U8InfoTask implements IInfoTask {
     if (code == HttpURLConnection.HTTP_OK) {
       BufferedReader reader =
           new BufferedReader(new InputStreamReader(ConnectionHelp.convertInputStream(conn)));
-      String line = reader.readLine();
+      String line = BoundedLineReader.readLine(reader, 5_000_000);
       if (TextUtils.isEmpty(line) || !line.equalsIgnoreCase("#EXTM3U")) {
         failDownload("读取M3U8信息失败，读取不到#EXTM3U标签", false);
         return;
@@ -151,7 +152,7 @@ final public class M3U8InfoTask implements IInfoTask {
         ALog.d(TAG, line);
         addIndexInfo(true, fos, line);
       }
-      while ((line = reader.readLine()) != null) {
+      while ((line = BoundedLineReader.readLine(reader, 5_000_000)) != null) {
         if (isStop) {
           break;
         }
@@ -163,7 +164,7 @@ final public class M3U8InfoTask implements IInfoTask {
         }
 
         if (line.startsWith("#EXTINF")) {
-          String url = reader.readLine();
+          String url = BoundedLineReader.readLine(reader, 5_000_000);
           if (isLive) {
             if (onGetPeerCallback != null) {
               onGetPeerCallback.onGetPeer(url, line);
@@ -186,9 +187,9 @@ final public class M3U8InfoTask implements IInfoTask {
           //  mInfos.clear();
           //}
           if (setBand == 0) {
-            handleBandWidth(conn, reader.readLine());
+            handleBandWidth(conn, BoundedLineReader.readLine(reader, 5_000_000));
           } else if (bandWidth == setBand) {
-            handleBandWidth(conn, reader.readLine());
+            handleBandWidth(conn, BoundedLineReader.readLine(reader, 5_000_000));
           } else {
             failDownload(String.format("【%s】码率不存在", setBand), false);
           }

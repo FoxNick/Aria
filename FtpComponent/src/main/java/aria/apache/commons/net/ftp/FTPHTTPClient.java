@@ -17,6 +17,7 @@
 
 package aria.apache.commons.net.ftp;
 
+import io.github.pixee.security.BoundedLineReader;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -159,8 +160,8 @@ public class FTPHTTPClient extends FTPClient {
     List<String> response = new ArrayList<String>();
     BufferedReader reader = new BufferedReader(new InputStreamReader(input, getCharset()));
 
-    for (String line = reader.readLine(); line != null && line.length() > 0;
-        line = reader.readLine()) {
+    for (String line = BoundedLineReader.readLine(reader, 5_000_000); line != null && line.length() > 0;
+        line = BoundedLineReader.readLine(reader, 5_000_000)) {
       response.add(line);
     }
 
