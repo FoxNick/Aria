@@ -27,6 +27,7 @@ import android.os.storage.StorageVolume;
 import android.text.TextUtils;
 import android.util.Log;
 import com.arialyy.aria.core.AriaConfig;
+import io.github.pixee.security.ObjectInputFilters;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -296,6 +297,7 @@ public class FileUtil {
     try {
       fis = new FileInputStream(filePath);
       ObjectInputStream oois = new ObjectInputStream(fis);
+      ObjectInputFilters.enableObjectFilterIfUnprotected(oois);
       return oois.readObject();
     } catch (FileNotFoundException e) {
       e.printStackTrace();
