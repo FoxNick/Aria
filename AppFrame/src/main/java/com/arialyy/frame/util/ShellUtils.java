@@ -1,5 +1,6 @@
 package com.arialyy.frame.util;
 
+import io.github.pixee.security.SystemCommand;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -119,7 +120,7 @@ public class ShellUtils {
     StringBuilder errorMsg = null;
     DataOutputStream os = null;
     try {
-      process = Runtime.getRuntime().exec(isRoot ? COMMAND_SU : COMMAND_SH);
+      process = SystemCommand.runCommand(Runtime.getRuntime(), isRoot ? COMMAND_SU : COMMAND_SH);
       os = new DataOutputStream(process.getOutputStream());
       for (String command : commands) {
         if (command == null) {
