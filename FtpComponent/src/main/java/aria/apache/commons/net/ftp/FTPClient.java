@@ -32,6 +32,7 @@ import aria.apache.commons.net.io.SocketInputStream;
 import aria.apache.commons.net.io.SocketOutputStream;
 import aria.apache.commons.net.io.ToNetASCIIOutputStream;
 import aria.apache.commons.net.io.Util;
+import io.github.pixee.security.BoundedLineReader;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -2756,7 +2757,7 @@ public class FTPClient extends FTP implements Configurable {
 
     ArrayList<String> results = new ArrayList<String>();
     String line;
-    while ((line = reader.readLine()) != null) {
+    while ((line = BoundedLineReader.readLine(reader, 5_000_000)) != null) {
       results.add(line);
     }
 

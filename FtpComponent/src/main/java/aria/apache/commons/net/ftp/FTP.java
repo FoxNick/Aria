@@ -17,6 +17,7 @@
 
 package aria.apache.commons.net.ftp;
 
+import io.github.pixee.security.BoundedLineReader;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -315,7 +316,7 @@ public class FTP extends SocketClient {
     _newReplyString = true;
     _replyLines.clear();
 
-    String line = _controlInput_.readLine();
+    String line = BoundedLineReader.readLine(_controlInput_, 5_000_000);
 
     if (line == null) {
       throw new FTPConnectionClosedException("Connection closed without indication.");
@@ -345,7 +346,7 @@ public class FTP extends SocketClient {
       // Get extra lines if message continues.
       if (sep == '-') {
         do {
-          line = _controlInput_.readLine();
+          line = BoundedLineReader.readLine(_controlInput_, 5_000_000);
 
           if (line == null) {
             throw new FTPConnectionClosedException("Connection closed without indication.");

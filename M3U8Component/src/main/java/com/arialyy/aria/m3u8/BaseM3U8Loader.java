@@ -23,6 +23,7 @@ import com.arialyy.aria.core.listener.IEventListener;
 import com.arialyy.aria.core.loader.AbsNormalLoader;
 import com.arialyy.aria.util.ALog;
 import com.arialyy.aria.util.FileUtil;
+import io.github.pixee.security.BoundedLineReader;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -85,13 +86,13 @@ public abstract class BaseM3U8Loader extends AbsNormalLoader<DTaskWrapper> {
       BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
       String line;
       int i = 0;
-      while ((line = reader.readLine()) != null) {
+      while ((line = BoundedLineReader.readLine(reader, 5_000_000)) != null) {
         byte[] bytes;
         if (line.startsWith("#EXTINF")) {
           fos.write(line.concat("\r\n").getBytes(Charset.forName("UTF-8")));
           String tsPath = getTsFilePath(cacheDir, mRecord.threadRecords.get(i).threadId);
           bytes = tsPath.concat("\r\n").getBytes(Charset.forName("UTF-8"));
-          reader.readLine(); // 继续读一行，避免写入源索引文件的切片地址
+          BoundedLineReader.readLine(reader, 5_000_000); // 继续读一行，避免写入源索引文件的切片地址
           i++;
         } else if (line.startsWith("#EXT-X-KEY")) {
           M3U8Entity m3U8Entity = getEntity().getM3U8Entity();

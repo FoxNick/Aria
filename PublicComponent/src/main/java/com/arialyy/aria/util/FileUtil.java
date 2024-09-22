@@ -27,6 +27,7 @@ import android.os.storage.StorageVolume;
 import android.text.TextUtils;
 import android.util.Log;
 import com.arialyy.aria.core.AriaConfig;
+import io.github.pixee.security.BoundedLineReader;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -905,7 +906,7 @@ public class FileUtil {
       FileReader fr = new FileReader(file_path);
       BufferedReader localBufferedReader = new BufferedReader(fr, 8192);
       // 读取meminfo第一行，系统总内存大小
-      ram_info = localBufferedReader.readLine();
+      ram_info = BoundedLineReader.readLine(localBufferedReader, 5_000_000);
       arrayOfRam = ram_info.split("\\s+");// 实现多个空格切割的效果
       initial_memory =
           Integer.valueOf(arrayOfRam[1]) * 1024;// 获得系统总内存，单位是KB，乘以1024转换为Byte

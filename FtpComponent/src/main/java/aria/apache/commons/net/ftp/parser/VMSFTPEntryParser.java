@@ -21,6 +21,7 @@ import aria.apache.commons.net.ftp.FTPClientConfig;
 import aria.apache.commons.net.ftp.FTPFile;
 import aria.apache.commons.net.ftp.FTPFileEntryParser;
 import aria.apache.commons.net.ftp.FTPListParseEngine;
+import io.github.pixee.security.BoundedLineReader;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.text.ParseException;
@@ -192,11 +193,11 @@ public class VMSFTPEntryParser extends ConfigurableFTPFileEntryParserImpl {
    * @throws IOException thrown on any IO Error reading from the reader.
    */
   @Override public String readNextEntry(BufferedReader reader) throws IOException {
-    String line = reader.readLine();
+    String line = BoundedLineReader.readLine(reader, 5_000_000);
     StringBuilder entry = new StringBuilder();
     while (line != null) {
       if (line.startsWith("Directory") || line.startsWith("Total")) {
-        line = reader.readLine();
+        line = BoundedLineReader.readLine(reader, 5_000_000);
         continue;
       }
 
@@ -204,7 +205,7 @@ public class VMSFTPEntryParser extends ConfigurableFTPFileEntryParserImpl {
       if (line.trim().endsWith(")")) {
         break;
       }
-      line = reader.readLine();
+      line = BoundedLineReader.readLine(reader, 5_000_000);
     }
     return (entry.length() == 0 ? null : entry.toString());
   }
