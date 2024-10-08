@@ -36,6 +36,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.lang.reflect.Array;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -429,7 +430,7 @@ public final class DiskLruCache implements Closeable {
       journalWriter.close();
     }
 
-    Writer writer = new BufferedWriter(new FileWriter(journalFileTmp), IO_BUFFER_SIZE);
+    Writer writer = Files.newBufferedWriter(journalFileTmp.toPath());
     writer.write(MAGIC);
     writer.write("\n");
     writer.write(VERSION_1);
