@@ -8,6 +8,8 @@ import androidx.annotation.NonNull;
 import com.arialyy.frame.cache.CacheUtil;
 import com.arialyy.frame.http.inf.IResponse;
 import com.arialyy.frame.util.show.L;
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import java.io.BufferedInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -116,7 +118,7 @@ public class HttpUtil {
         String PREFIX = "--", LINE_END = "\r\n";
         String CONTENT_TYPE = "multipart/form-data"; // 内容类型
         try {
-          HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
+          HttpURLConnection conn = (HttpURLConnection) Urls.create(url, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS).openConnection();
           conn.setReadTimeout(5000);
           conn.setConnectTimeout(5000);
           conn.setDoInput(true);
