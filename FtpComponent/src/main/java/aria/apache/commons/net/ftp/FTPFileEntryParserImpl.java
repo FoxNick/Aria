@@ -17,6 +17,7 @@
 
 package aria.apache.commons.net.ftp;
 
+import io.github.pixee.security.BoundedLineReader;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.List;
@@ -44,7 +45,7 @@ public abstract class FTPFileEntryParserImpl implements FTPFileEntryParser {
    * @throws IOException thrown on any IO Error reading from the reader.
    */
   @Override public String readNextEntry(BufferedReader reader) throws IOException {
-    return reader.readLine();
+    return BoundedLineReader.readLine(reader, 5_000_000);
   }
 
   /**

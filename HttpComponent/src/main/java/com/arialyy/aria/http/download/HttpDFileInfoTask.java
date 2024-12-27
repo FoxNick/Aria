@@ -36,6 +36,7 @@ import com.arialyy.aria.util.CheckUtil;
 import com.arialyy.aria.util.CommonUtil;
 import com.arialyy.aria.util.FileUtil;
 import com.arialyy.aria.util.RecordUtil;
+import io.github.pixee.security.BoundedLineReader;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -215,7 +216,7 @@ final class HttpDFileInfoTask implements IInfoTask, Runnable {
             new BufferedReader(new InputStreamReader(ConnectionHelp.convertInputStream(conn)));
         StringBuilder sb = new StringBuilder();
         String line;
-        while ((line = reader.readLine()) != null) {
+        while ((line = BoundedLineReader.readLine(reader, 5_000_000)) != null) {
           sb.append(line);
         }
         reader.close();

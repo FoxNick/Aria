@@ -1,6 +1,7 @@
 package com.arialyy.frame.util;
 
 import android.widget.TextView;
+import io.github.pixee.security.BoundedLineReader;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -67,7 +68,7 @@ public class TextUtil {
       inputStreamReader = new InputStreamReader(fileInputStream);
       bufferedReader = new BufferedReader(inputStreamReader);
       String text;
-      while ((text = bufferedReader.readLine()) != null) {
+      while ((text = BoundedLineReader.readLine(bufferedReader, 5_000_000)) != null) {
         list.add(text);
       }
     } catch (FileNotFoundException e) {
@@ -103,7 +104,7 @@ public class TextUtil {
       inputStreamReader = new InputStreamReader(inputStream);
       bufferedReader = new BufferedReader(inputStreamReader);
       String text;
-      while ((text = bufferedReader.readLine()) != null) {
+      while ((text = BoundedLineReader.readLine(bufferedReader, 5_000_000)) != null) {
         list.add(text);
       }
     } catch (FileNotFoundException e) {
