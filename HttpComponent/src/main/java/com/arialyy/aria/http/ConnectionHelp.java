@@ -22,6 +22,8 @@ import com.arialyy.aria.core.common.RequestEnum;
 import com.arialyy.aria.util.ALog;
 import com.arialyy.aria.util.CommonUtil;
 import com.arialyy.aria.util.SSLContextUtil;
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.CookieManager;
@@ -55,7 +57,7 @@ public final class ConnectionHelp {
     if (params != null && taskDelegate.getRequestEnum() == RequestEnum.GET) {
       if (url.contains("?")) {
         ALog.e(TAG, String.format("设置参数失败，url中已经有?，url: %s", url));
-        return new URL(CommonUtil.convertUrl(url));
+        return Urls.create(CommonUtil.convertUrl(url), Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
       }
       StringBuilder sb = new StringBuilder();
       sb.append(url).append("?");
@@ -65,9 +67,9 @@ public final class ConnectionHelp {
       }
       String temp = sb.toString();
       temp = temp.substring(0, temp.length() - 1);
-      return new URL(CommonUtil.convertUrl(temp));
+      return Urls.create(CommonUtil.convertUrl(temp), Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
     } else {
-      return new URL(CommonUtil.convertUrl(url));
+      return Urls.create(CommonUtil.convertUrl(url), Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
     }
   }
 
