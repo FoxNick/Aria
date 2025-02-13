@@ -50,6 +50,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -489,7 +490,7 @@ public class FTPClient extends FTP implements Configurable {
     __configuration = null;
     __listHiddenFiles = false;
     __useEPSVwithIPv4 = false;
-    __random = new Random();
+    __random = new SecureRandom();
     __passiveLocalHost = null;
   }
 
