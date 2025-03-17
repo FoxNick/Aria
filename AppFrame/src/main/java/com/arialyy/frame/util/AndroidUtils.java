@@ -25,6 +25,7 @@ import android.view.WindowManager;
 
 import com.arialyy.frame.util.show.FL;
 import com.arialyy.frame.util.show.L;
+import io.github.pixee.security.SystemCommand;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -203,7 +204,7 @@ public class AndroidUtils {
   private static boolean isExecutable(String filePath) {
     Process p = null;
     try {
-      p = Runtime.getRuntime().exec("ls -l " + filePath);
+      p = SystemCommand.runCommand(Runtime.getRuntime(), "ls -l " + filePath);
       // 获取返回内容
       BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
       String str = in.readLine();
